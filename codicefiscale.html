@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta name="author" content="Gregorio Gervasio">
+    <title>codice fiscale</title>
+    <link rel="stylesheet" href="codicefiscale.css">
+</head>
+<body>
+    <h1 id="titolo">codice fiscale</h1>
+    <h3 id="sottotitolo">progetto educazzione civica di informatica <br></h3>
+    <h2 id="tp">esterno</h2>
+    <pre id="par">
+        <br>
+        #include &lt;stdio.h&gt;        ---- include
+        #include &lt;string.h&gt;
+        #include &lt;ctype.h&gt;
+
+        void name();        ---- dichiarazione funzioni
+        void surr();
+        void yea();
+        void mon();
+        void day_gend();
+        int cy();
+        void chk();
+        void print();
+
+        char surrname[3]= {'X','X','X'}, na[3]= {'X','X','X'}, month, city[4], check_code;      ---- variabili globali
+        int ann, day, febb=28, nday;
+    </pre>
+
+    <h2 id="tp">main</h2>
+    <pre id="par">
+        <br>
+        printf("calcolo codice fiscale\n");
+        surr();         ---- apertura delle funzzioni
+        name();
+        yea();
+        mon();
+        day_gend();
+        int i = cy();
+        if(i == 1)      ---- errore in caso di citta non presente nel file
+        {
+            printf("errore citta non presente");
+            return 1;
+        }
+        chk();
+        print();
+        return 0;
+    </pre>
+
+    <h2 id="tp">nome e cognome</h2>
+    <pre id="par">
+        <br>
+        char surr[]="Wolfeschlegelsteinhausenbergerdorff", voc[3]= {'X','X','X'};       ---- inizializazione variabili
+        int l, x, y, nc=0, pos1=0, pos2=0, ncon=0;
+        printf("inserire il cognome: ");        ---- scanf per il cognome o nome
+        scanf("%s",surr); 
+        l=strlen(surr);     ---- controllo lungezza grazzie a strlen <br>
+        for(x=0; x&lt;l; x++)       ---- suddivisione consonanti e vocali gazzie allo switch
+        {
+            switch (surr[x])
+            {
+            case 'a':
+            case 'e':
+            case 'i':
+            case 'o':
+            case 'u':
+            {
+                break;
+            }
+            default:
+            {
+                ncon++;
+                break;
+            }
+            }
+        }
+        for(x=0; x&lt;l; x++)       ---- selezzione delle consonanti
+        {
+            switch (surr[x])
+            {
+            case 'a':
+            case 'e':
+            case 'i':
+            case 'o':
+            case 'u':
+                if(pos2&lt;3)
+                {
+                    voc[pos2]=surr[x];
+                    pos2++;
+                }
+                break;
+            default:
+                nc++;
+                if(nc==1 || nc==2 || nc==3)
+                {
+                    surrname[pos1]=surr[x];
+                    pos1++;
+                }
+                break;
+            }
+        }
+        while(pos1&lt;3 && pos1&lt;=l && ncon&lt;l)         ---- selezzione delle vocali
+        {
+            surrname[pos1]=voc[y];
+            y++;
+            pos1++;
+        }
+    </pre>
+
+    <h2 id="tp">anno di nascita</h2>
+    <pre id="par">
+        <br>
+        int x;
+		printf("inserire l'anno di nascita: ");     ---- inserimento data
+		scanf("%d",&ann);
+		while(ann>2026 || ann<=1907)        ---- controllo validita dell'anno
+		{
+			printf("l'anno non è valido, reinserirlo: ");
+			scanf("%d",&ann);
+		}
+		if(ann%400==0)      ---- controllo bisestilita per febraio
+		{
+			febb=29;
+		}
+		if(ann < 2000)        ---- elliminazione delle prime due cifre dell'anno
+		{
+			ann-=1000;
+		}
+		else
+		{
+			ann-=2000;
+		}
+		for(x=900; x>=0; x-=100)
+		{
+			if(ann>x)
+			{
+				ann-=x;
+				break;
+			}
+			else if(ann==x)
+			{
+				ann=0;
+				break;
+			}
+		}
+    </pre>
+
+    <h2 id="tp">mese di nacita</h2>
+    <pre id="par">
+        <br>
+        char lett[12]= {'A','B','C','D','E','H','L','M','P','R','S','T'};       ---- lettere del mese
+		int m, len[12]= {31,febb,31,30,31,30,31,31,30,31,30,31};
+		printf("inserisci il mese numerale: ");         ---- inserimento mese
+		scanf("%d",&m);
+		while(m < 1 || m > 12)      ---- controllo validita mese
+		{
+			printf("mese non valido, deve essere compreso tra 1 e 12: ");
+			scanf("%d",&m);
+		}
+		month=lett[m-1];        ---- selezzione lettera
+		nday=len[m-1];
+    </pre>
+
+    <h2 id="tp">giorno e sesso</h2>
+    <pre id="par">
+        <br>
+        int gio;
+		char gen = 'm';
+		printf("inserire il giorno di nascita: ");      ---- inserimento giorno
+		scanf(" %d",&gio);
+		while(gio < 1 || gio > nday)        ---- validazione data
+		{
+			printf("giorno non valido deve essere compreso tra 1 e %d: ",nday);
+			scanf(" %d",&gio);
+		}
+		printf("inserire genere M/F: ");        ---- inserimento sesso
+		scanf(" %c",&gen);
+		while(gen!='m' && gen!='M' && gen!='f' && gen!='F')         ---- validazione sesso
+		{
+			printf("genere non riconosciuto inserire M/F: ");
+			scanf(" %c",&gen);
+		}
+
+		if(gen=='f' || gen=='F')        ---- modifica del giorno basato sul sesso
+		{
+			gio+=40;
+		}
+		day = gio;
+    </pre>
+
+    <h2 id="tp"> citta </h2>
+    <pre id="par">
+        <br>
+        int i = 1, x = 0;
+		char reeder[20], input[20], output[4];
+		char city[4];
+		FILE *file;
+		file = fopen("comuni.txt", "r");        ---- apertura file
+		if (file == NULL) {         ---- controllo se il file è valido
+			printf("Errore nell'apertura del file.\n");
+			return 1;
+		}
+
+		printf("Inserire il nome del comune: ");        ---- inserimento citta
+		scanf(" %s", input);
+
+		while (fscanf(file, "%s %s\n", reeder, output) == 2)
+		{
+			if (strcmp(input, reeder) == 0)
+			{
+				printf("ciao");
+				i = 0;
+				break;
+			}
+		}
+		fclose(file);
+		return i;
+    </pre>
+
+    <h2 id="tp">file comuni.txt</h2>
+    <pre id="par">
+        <br>
+        torino L219
+        roma H501
+        napoli F839
+        milano F205
+        ravenna H199
+    </pre>
+
+    <h2 id="tp"></h2>
+    <pre id="par">
+        <br>
+    </pre>
+</body>
+</html>
